@@ -100,6 +100,26 @@ void Element::releaseRequestPad(const PadPtr & pad)
     gst_element_release_request_pad(object<GstElement>(), pad);
 }
 
+QList<PadPtr> Element::pads(bool src, bool sink) const
+{
+    QList<PadPtr> ret;
+    GstPad *pad;
+    GstIterator *iter;
+
+    if (src) {
+        iter = gst_element_iterate_src_pads(object<GstElement>());
+        while (gst_iterator_next(iter, (gpointer*)&pad) == GST_ITERATOR_OK)
+            ret.append(PadPtr::wrap(pad, false));
+    }
+    if (sink) {
+        iter = gst_element_iterate_sink_pads(object<GstElement>());
+        while (gst_iterator_next(iter, (gpointer*)&pad) == GST_ITERATOR_OK)
+            ret.append(PadPtr::wrap(pad, false));
+    }
+
+    return ret;
+}
+
 bool Element::link(const char *srcPadName, const ElementPtr & dest,
                    const char *sinkPadName, const CapsPtr & filter)
 {

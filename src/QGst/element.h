@@ -20,6 +20,7 @@
 #include "object.h"
 #include "caps.h"
 #include "clocktime.h"
+#include <QtCore/QList>
 
 #if !QGLIB_HAVE_CXX0X
 # include <boost/preprocessor.hpp>
@@ -49,6 +50,8 @@ public:
     PadPtr getStaticPad(const char *name);
     PadPtr getRequestPad(const char *name);
     void releaseRequestPad(const PadPtr & pad);
+
+    QList<PadPtr> pads(bool src, bool sink) const;
 
     ClockPtr clock() const;
     bool setClock(const ClockPtr & clock);
